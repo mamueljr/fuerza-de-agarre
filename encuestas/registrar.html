@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Registrar Encuestado</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body>
+    <h1>Registrar Nuevo Encuestado</h1>
+
+    <form id="formRegistro" class="form">
+      <label for="id">ID del encuestado:</label>
+      <input type="text" id="id" required placeholder="Ej. ASILO01-001" />
+
+      <label for="edad">Edad:</label>
+      <input type="number" id="edad" required min="50" max="120" />
+
+      <label for="sexo">Sexo:</label>
+      <select id="sexo" required>
+        <option value="">Seleccione</option>
+        <option value="Femenino">Femenino</option>
+        <option value="Masculino">Masculino</option>
+      </select>
+
+      <button type="submit">Guardar y comenzar encuesta</button>
+      <button type="button" onclick="location.href='index.html'">
+        Cancelar
+      </button>
+    </form>
+
+    <footer>ESISCOM &copy; 2025</footer>
+
+    <script>
+      const form = document.getElementById("formRegistro");
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const id = document.getElementById("id").value.trim();
+        const edad = parseInt(document.getElementById("edad").value.trim());
+        const sexo = document.getElementById("sexo").value;
+
+        if (!id || !edad || !sexo) {
+          alert("Por favor complete todos los campos.");
+          return;
+        }
+
+        const encuestado = {
+          id,
+          edad,
+          sexo,
+          sf36: false,
+          seniorFitness: false,
+          folstein: false,
+          dinamometria: false,
+          fechaRegistro: new Date().toISOString(),
+        };
+
+        // Guardar en localStorage
+        const registros = JSON.parse(
+          localStorage.getItem("encuestados") || "[]"
+        );
+        registros.push(encuestado);
+        localStorage.setItem("encuestados", JSON.stringify(registros));
+
+        // Redirigir a la primera encuesta
+        window.location.href = "sf36.html";
+      });
+    </script>
+  </body>
+</html>

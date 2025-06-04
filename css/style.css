@@ -39,3 +39,19 @@ footer {
   font-size: 14px;
   color: #888;
 }
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 600px;
+  margin: 0 auto 40px;
+}
+
+.card {
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: left;
+  box-shadow: 0 0 6px rgba(0,0,0,0.1);
+}
