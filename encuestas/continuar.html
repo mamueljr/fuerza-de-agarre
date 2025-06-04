@@ -4,14 +4,21 @@
     <meta charset="UTF-8" />
     <title>Continuar Encuesta</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="../css/style.css" />
   </head>
   <body>
     <h1>Continuar Encuesta Pendiente</h1>
 
     <div id="listaPendientes" class="lista"></div>
 
-    <button onclick="location.href='../index.html'">⬅️ Volver al menú</button>
+    <div class="botones">
+      <button class="guardar" onclick="guardarBackup()">
+        Guardar respaldo
+      </button>
+      <button class="cancelar" onclick="location.href='../index.html'">
+        ⬅️ Volver al menú
+      </button>
+    </div>
 
     <footer>ESISCOM &copy; 2025</footer>
 
@@ -22,7 +29,7 @@
       );
 
       const pendientes = encuestados.filter(
-        (e) => !e.sf36 || !e.seniorFitness || !e.folstein || !e.dinamometria
+        (e) => !e.folstein || !e.dinamometria
       );
 
       if (pendientes.length === 0) {
@@ -30,14 +37,8 @@
       } else {
         pendientes.forEach((e) => {
           const estado = [];
-          if (e.sf36) estado.push("✅ SF-36");
-          else estado.push("❌ SF-36");
-          if (e.seniorFitness) estado.push("✅ Senior Fitness");
-          else estado.push("❌ Senior Fitness");
-          if (e.folstein) estado.push("✅ Folstein");
-          else estado.push("❌ Folstein");
-          if (e.dinamometria) estado.push("✅ Dinamometría");
-          else estado.push("❌ Dinamometría");
+          estado.push(e.folstein ? "✅ Folstein" : "❌ Folstein");
+          estado.push(e.dinamometria ? "✅ Dinamometría" : "❌ Dinamometría");
 
           const div = document.createElement("div");
           div.className = "card";
@@ -55,14 +56,28 @@
 
       function continuar(id) {
         localStorage.setItem("encuestadoActual", id);
-        // Aquí puedes decidir a qué encuesta redirigir según el avance
         const encuestado = encuestados.find((e) => e.id === id);
-
-        if (!encuestado.sf36) location.href = "sf36.html";
-        else if (!encuestado.seniorFitness)
-          location.href = "senior_fitness.html";
-        else if (!encuestado.folstein) location.href = "folstein.html";
+        if (!encuestado.folstein) location.href = "folstein.html";
         else if (!encuestado.dinamometria) location.href = "dinamometria.html";
+      }
+
+      function guardarBackup() {
+        const registros = JSON.parse(
+          localStorage.getItem("encuestados") || "[]"
+        );
+        if (registros.length === 0) return alert("No hay datos que guardar.");
+        const encabezados = Object.keys(registros[0]);
+        const filas = registros.map((obj) =>
+          encabezados.map((k) => `"${obj[k]}"`).join(",")
+        );
+        const csv = [encabezados.join(","), ...filas].join("\\n");
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "respaldo_encuestados.csv";
+        a.click();
+        URL.revokeObjectURL(url);
       }
     </script>
   </body>

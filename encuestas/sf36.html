@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Encuesta SF-36</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body>
+    <h1>Encuesta SF-36</h1>
+
+    <form id="formSf36" class="form">
+      <!-- Aquí se agregarán las preguntas del cuestionario SF-36 -->
+
+      <p>Esta es una plantilla lista para comenzar la encuesta SF-36.</p>
+
+      <div class="botones">
+        <button type="button" class="guardar" onclick="guardarBackup()">
+          Guardar avances
+        </button>
+        <button
+          type="button"
+          class="cancelar"
+          onclick="location.href='../index.html'"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
+
+    <footer>ESISCOM &copy; 2025</footer>
+
+    <script>
+      function guardarBackup() {
+        const registros = JSON.parse(
+          localStorage.getItem("encuestados") || "[]"
+        );
+        if (registros.length === 0) return alert("No hay datos que guardar.");
+        const encabezados = Object.keys(registros[0]);
+        const filas = registros.map((obj) =>
+          encabezados.map((k) => `"${obj[k]}"`).join(",")
+        );
+        const csv = [encabezados.join(","), ...filas].join("\\n");
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "respaldo_encuestados.csv";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    </script>
+    <div id="modalInstrucciones" class="modal-overlay">
+      <div class="modal-contenido">
+        <p>
+          A través de este cuestionario queremos que reflexione sobre su
+          experiencia. <strong>ESTO NO ES UN EXAMEN.</strong><br /><br />
+          No hay respuestas correctas o incorrectas, ni respuestas que sean
+          mejores que otras.<br /><br />
+          Cada persona puede responder de forma diferente.<br /><br />
+          En cada pantalla hay una afirmación en la que se le pedirá manifieste
+          su grado de acuerdo.<br /><br />
+          Sea honesto y lo más preciso posible al responder; recuerde que los
+          resultados de esta investigación tienen un gran valor para nuestra
+          investigación.<br /><br />
+          De nuevo gracias por tu participación.
+        </p>
+        <p style="text-align: center; font-weight: bold; margin-top: 20px">
+          SI YA NO TIENES NINGUNA DUDA<br />
+          OPRIME EL BOTÓN OK,<br />
+          EN CASO CONTRARIO,<br />
+          LLAMA AL ENCUESTADOR.
+        </p>
+        <button
+          onclick="cerrarModal()"
+          class="guardar"
+          style="margin-top: 20px"
+        >
+          OK
+        </button>
+      </div>
+    </div>
+
+    <script>
+      function cerrarModal() {
+        document.getElementById("modalInstrucciones").style.display = "none";
+      }
+    </script>
+  </body>
+</html>

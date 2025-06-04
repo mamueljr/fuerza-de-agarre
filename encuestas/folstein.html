@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Encuesta Folstein (MMSE)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <style>
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(40, 0, 60, 0.95);
+        color: white;
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .modal-contenido {
+        max-width: 90%;
+        max-height: 90vh;
+        text-align: left;
+        background-color: transparent;
+        padding: 20px;
+        border-radius: 10px;
+        font-size: 16px;
+        line-height: 1.4;
+        overflow-y: auto;
+      }
+
+      .modal-contenido button {
+        display: block;
+        margin: 20px auto 0;
+        font-size: 18px;
+        padding: 10px 25px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Test de Folstein (Mini-Mental)</h1>
+
+    <!-- INSTRUCCIONES MODAL -->
+    <div id="modalInstrucciones" class="modal-overlay">
+      <div class="modal-contenido">
+        <p>
+          A continuación, se le pedirá responder unas preguntas relacionadas con
+          sus conocimientos generales.<br /><br />
+          Le pido escuchar atentamente las instrucciones.<br /><br />
+          Antes de iniciar ¿Tiene usted alguna duda o inquietud que le gustaría
+          comentar o resolver?
+        </p>
+        <p style="text-align: center; font-weight: bold; margin-top: 20px">
+          SI EL ADULTO MAYOR NO TIENE NINGUNA DUDA<br />
+          OPRIMA EL BOTÓN OK.
+        </p>
+        <button onclick="cerrarModal()" class="guardar">OK</button>
+      </div>
+    </div>
+
+    <!-- FORMULARIO FOLSTEIN -->
+    <form id="formFolstein" class="form">
+      <fieldset>
+        <legend><strong>1. ¿En qué año estamos?</strong></legend>
+        <input type="text" name="p1" required placeholder="Ingrese el año" />
+      </fieldset>
+
+      <fieldset>
+        <legend><strong>2. ¿En qué estación del año estamos?</strong></legend>
+        <select name="p2" required class="grande">
+          <option value="">Seleccione</option>
+          <option value="Primavera">Primavera</option>
+          <option value="Verano">Verano</option>
+          <option value="Otoño">Otoño</option>
+          <option value="Invierno">Invierno</option>
+        </select>
+      </fieldset>
+
+      <fieldset>
+        <legend><strong>3. ¿En qué mes estamos?</strong></legend>
+        <input type="text" name="p3" required placeholder="Ej. Marzo" />
+      </fieldset>
+
+      <fieldset>
+        <legend><strong>4. ¿En qué día de la semana estamos?</strong></legend>
+        <input type="text" name="p4" required placeholder="Ej. Lunes" />
+      </fieldset>
+
+      <fieldset>
+        <legend><strong>5. ¿En qué lugar nos encontramos?</strong></legend>
+        <input
+          type="text"
+          name="p5"
+          required
+          placeholder="Ej. Nombre del asilo"
+        />
+      </fieldset>
+
+      <div class="botones">
+        <button type="button" class="guardar" onclick="guardarBackup()">
+          Guardar respaldo
+        </button>
+        <button
+          type="button"
+          class="cancelar"
+          onclick="location.href='../index.html'"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
+
+    <footer>ESISCOM &copy; 2025</footer>
+
+    <script>
+      function cerrarModal() {
+        document.getElementById("modalInstrucciones").style.display = "none";
+      }
+
+      function guardarBackup() {
+        const registros = JSON.parse(
+          localStorage.getItem("encuestados") || "[]"
+        );
+        if (registros.length === 0) return alert("No hay datos para guardar.");
+        const encabezados = Object.keys(registros[0]);
+        const filas = registros.map((obj) =>
+          encabezados.map((k) => `"${obj[k]}"`).join(",")
+        );
+        const csv = [encabezados.join(","), ...filas].join("\\n");
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "respaldo_encuestados.csv";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    </script>
+  </body>
+</html>

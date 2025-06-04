@@ -27,7 +27,6 @@ h1 {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 .menu button:hover {
@@ -80,4 +79,45 @@ footer {
 
 .tabla tr:hover {
   background-color: #f1f1f1;
+}
+
+.edad-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.edad-container button {
+  font-size: 24px;
+  padding: 10px 20px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+}
+
+.grande {
+  font-size: 18px;
+  padding: 12px;
+}
+
+.botones button {
+  font-size: 18px;
+  padding: 12px 20px;
+  margin: 10px 5px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.guardar {
+  background-color: #4caf50;
+  color: white;
+}
+
+.cancelar {
+  background-color: #f44336;
+  color: white;
 }

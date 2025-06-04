@@ -8,25 +8,39 @@
   </head>
   <body>
     <h1>Registrar Nuevo Encuestado</h1>
-
     <form id="formRegistro" class="form">
       <label for="id">ID del encuestado:</label>
       <input type="text" id="id" required placeholder="Ej. ASILO01-001" />
 
       <label for="edad">Edad:</label>
-      <input type="number" id="edad" required min="50" max="120" />
+      <div class="edad-container">
+        <button type="button" onclick="ajustarEdad(-1)">−</button>
+        <input type="number" id="edad" required min="50" max="120" />
+        <button type="button" onclick="ajustarEdad(1)">+</button>
+      </div>
 
       <label for="sexo">Sexo:</label>
-      <select id="sexo" required>
+      <select id="sexo" required class="grande">
         <option value="">Seleccione</option>
         <option value="Femenino">Femenino</option>
         <option value="Masculino">Masculino</option>
       </select>
 
-      <button type="submit">Guardar y comenzar encuesta</button>
-      <button type="button" onclick="location.href='index.html'">
-        Cancelar
-      </button>
+      <div class="botones">
+        <button type="submit" class="guardar">
+          Guardar y comenzar encuesta
+        </button>
+        <button type="button" onclick="guardarBackup()" class="guardar">
+          Guardar respaldo
+        </button>
+        <button
+          type="button"
+          onclick="location.href='../index.html'"
+          class="cancelar"
+        >
+          Cancelar
+        </button>
+      </div>
     </form>
 
     <footer>ESISCOM &copy; 2025</footer>
@@ -36,7 +50,6 @@
 
       form.addEventListener("submit", function (e) {
         e.preventDefault();
-
         const id = document.getElementById("id").value.trim();
         const edad = parseInt(document.getElementById("edad").value.trim());
         const sexo = document.getElementById("sexo").value;
@@ -50,23 +63,51 @@
           id,
           edad,
           sexo,
-          sf36: false,
-          seniorFitness: false,
           folstein: false,
           dinamometria: false,
           fechaRegistro: new Date().toISOString(),
         };
 
-        // Guardar en localStorage
         const registros = JSON.parse(
           localStorage.getItem("encuestados") || "[]"
         );
         registros.push(encuestado);
         localStorage.setItem("encuestados", JSON.stringify(registros));
 
-        // Redirigir a la primera encuesta
-        window.location.href = "sf36.html";
+        exportarCSV();
+        window.location.href = "folstein.html";
       });
+
+      function ajustarEdad(delta) {
+        const edadInput = document.getElementById("edad");
+        let valor = parseInt(edadInput.value) || 50;
+        valor += delta;
+        if (valor >= 50 && valor <= 120) edadInput.value = valor;
+      }
+
+      function guardarBackup() {
+        exportarCSV();
+        alert("Respaldo guardado.");
+      }
+
+      function exportarCSV() {
+        const registros = JSON.parse(
+          localStorage.getItem("encuestados") || "[]"
+        );
+        if (registros.length === 0) return;
+        const encabezados = Object.keys(registros[0]);
+        const filas = registros.map((obj) =>
+          encabezados.map((k) => `"${obj[k]}"`).join(",")
+        );
+        const csv = [encabezados.join(","), ...filas].join("\\n");
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "respaldo_encuestados.csv";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
     </script>
   </body>
 </html>

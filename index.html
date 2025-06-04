@@ -8,25 +8,41 @@
   </head>
   <body>
     <h1>Sistema de Encuestas - Adultos Mayores</h1>
-
     <div class="menu">
-      <button onclick="location.href='/encuestas/registrar.html'">
+      <button onclick="location.href='encuestas/registrar.html'">
         ➕ Registrar nuevo encuestado
       </button>
-      <button onclick="location.href='/encuestas/continuar.html'">
+      <button onclick="location.href='encuestas/continuar.html'">
         📋 Continuar encuesta pendiente
       </button>
-      <button onclick="location.href='/encuestas/completas.html'">
+      <button onclick="location.href='encuestas/completas.html'">
         📂 Ver encuestas completas
       </button>
-      <button onclick="location.href='/encuestas/exportar.html'">
-        ⬇️ Exportar resultados en CSV
-      </button>
-      <button onclick="location.href='/encuestas/configuracion.html'">
-        ⚙️ Configuración
-      </button>
+      <button onclick="exportarCSV()">⬇️ Exportar resultados en CSV</button>
     </div>
-
     <footer>ESISCOM &copy; 2025</footer>
+    <script>
+      function exportarCSV() {
+        const registros = JSON.parse(
+          localStorage.getItem("encuestados") || "[]"
+        );
+        if (registros.length === 0) {
+          alert("No hay datos para exportar.");
+          return;
+        }
+        const encabezados = Object.keys(registros[0]);
+        const filas = registros.map((obj) =>
+          encabezados.map((k) => `"${obj[k]}"`).join(",")
+        );
+        const csv = [encabezados.join(","), ...filas].join("\\n");
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "respaldo_encuestados.csv";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    </script>
   </body>
 </html>

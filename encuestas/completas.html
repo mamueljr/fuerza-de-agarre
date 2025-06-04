@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <title>Encuestas Completas</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="../css/style.css" />
   </head>
   <body>
     <h1>Encuestados con Evaluación Completa</h1>
@@ -25,21 +25,25 @@
       No hay encuestados con encuestas completas.
     </p>
 
-    <button onclick="location.href='../index.html'">⬅️ Volver al menú</button>
+    <div class="botones">
+      <button class="guardar" onclick="guardarBackup()">
+        Guardar respaldo
+      </button>
+      <button class="cancelar" onclick="location.href='../index.html'">
+        ⬅️ Volver al menú
+      </button>
+    </div>
 
     <footer>ESISCOM &copy; 2025</footer>
 
     <script>
       const tbody = document.querySelector("#tablaCompletas tbody");
       const mensajeVacio = document.getElementById("mensajeVacio");
-
       const encuestados = JSON.parse(
         localStorage.getItem("encuestados") || "[]"
       );
 
-      const completos = encuestados.filter(
-        (e) => e.sf36 && e.seniorFitness && e.folstein && e.dinamometria
-      );
+      const completos = encuestados.filter((e) => e.folstein && e.dinamometria);
 
       if (completos.length === 0) {
         document.querySelector("table").style.display = "none";
@@ -55,6 +59,25 @@
         `;
           tbody.appendChild(fila);
         });
+      }
+
+      function guardarBackup() {
+        const registros = JSON.parse(
+          localStorage.getItem("encuestados") || "[]"
+        );
+        if (registros.length === 0) return alert("No hay datos para guardar.");
+        const encabezados = Object.keys(registros[0]);
+        const filas = registros.map((obj) =>
+          encabezados.map((k) => `"${obj[k]}"`).join(",")
+        );
+        const csv = [encabezados.join(","), ...filas].join("\\n");
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "respaldo_encuestados.csv";
+        a.click();
+        URL.revokeObjectURL(url);
       }
     </script>
   </body>
