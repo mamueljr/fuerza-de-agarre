@@ -40,12 +40,32 @@
         font-size: 18px;
         padding: 10px 25px;
       }
+
+      .respuesta-btn {
+        font-size: 20px;
+        padding: 16px 28px;
+        margin: 10px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        min-width: 140px;
+      }
+
+      .correcto-activo {
+        background-color: #4caf50 !important;
+        color: white;
+      }
+
+      .incorrecto-activo {
+        background-color: #f44336 !important;
+        color: white;
+      }
     </style>
   </head>
   <body>
     <h1>Test de Folstein (Mini-Mental)</h1>
 
-    <!-- INSTRUCCIONES MODAL -->
+    <!-- MODAL INICIAL -->
     <div id="modalInstrucciones" class="modal-overlay">
       <div class="modal-contenido">
         <p>
@@ -63,42 +83,186 @@
       </div>
     </div>
 
-    <!-- FORMULARIO FOLSTEIN -->
+    <!-- FORMULARIO -->
     <form id="formFolstein" class="form">
       <fieldset>
         <legend><strong>1. ¿En qué año estamos?</strong></legend>
-        <input type="text" name="p1" required placeholder="Ingrese el año" />
+        <button
+          type="button"
+          class="respuesta-btn"
+          onclick="marcarRespuesta(this, 'p1', 1)"
+        >
+          Correcto
+        </button>
+        <button
+          type="button"
+          class="respuesta-btn"
+          onclick="marcarRespuesta(this, 'p1', 0)"
+        >
+          Incorrecto
+        </button>
       </fieldset>
 
       <fieldset>
-        <legend><strong>2. ¿En qué estación del año estamos?</strong></legend>
-        <select name="p2" required class="grande">
-          <option value="">Seleccione</option>
-          <option value="Primavera">Primavera</option>
-          <option value="Verano">Verano</option>
-          <option value="Otoño">Otoño</option>
-          <option value="Invierno">Invierno</option>
-        </select>
+        <legend><strong>2. ¿En qué estación estamos?</strong></legend>
+        <button
+          type="button"
+          class="respuesta-btn"
+          onclick="marcarRespuesta(this, 'p2', 1)"
+        >
+          Correcto
+        </button>
+        <button
+          type="button"
+          class="respuesta-btn"
+          onclick="marcarRespuesta(this, 'p2', 0)"
+        >
+          Incorrecto
+        </button>
       </fieldset>
 
       <fieldset>
-        <legend><strong>3. ¿En qué mes estamos?</strong></legend>
-        <input type="text" name="p3" required placeholder="Ej. Marzo" />
+        <legend><strong>3. ¿En qué día del mes estamos?</strong></legend>
+        <button
+          type="button"
+          class="respuesta-btn"
+          onclick="marcarRespuesta(this, 'p3', 1)"
+        >
+          Correcto
+        </button>
+        <button
+          type="button"
+          class="respuesta-btn"
+          onclick="marcarRespuesta(this, 'p3', 0)"
+        >
+          Incorrecto
+        </button>
       </fieldset>
 
       <fieldset>
-        <legend><strong>4. ¿En qué día de la semana estamos?</strong></legend>
-        <input type="text" name="p4" required placeholder="Ej. Lunes" />
+        <legend><strong>4. ¿En qué mes estamos?</strong></legend>
+        <button
+          type="button"
+          class="respuesta-btn"
+          onclick="marcarRespuesta(this, 'p4', 1)"
+        >
+          Correcto
+        </button>
+        <button
+          type="button"
+          class="respuesta-btn"
+          onclick="marcarRespuesta(this, 'p4', 0)"
+        >
+          Incorrecto
+        </button>
       </fieldset>
 
       <fieldset>
-        <legend><strong>5. ¿En qué lugar nos encontramos?</strong></legend>
-        <input
-          type="text"
-          name="p5"
-          required
-          placeholder="Ej. Nombre del asilo"
-        />
+        <legend><strong>5. ¿En qué día de la semana estamos?</strong></legend>
+        <button
+          type="button"
+          class="respuesta-btn"
+          onclick="marcarRespuesta(this, 'p5', 1)"
+        >
+          Correcto
+        </button>
+        <button
+          type="button"
+          class="respuesta-btn"
+          onclick="marcarRespuesta(this, 'p5', 0)"
+        >
+          Incorrecto
+        </button>
+      </fieldset>
+
+      <fieldset>
+        <legend><strong>6. ¿En qué lugar estamos?</strong></legend>
+        <button
+          type="button"
+          class="respuesta-btn"
+          onclick="marcarRespuesta(this, 'p6', 1)"
+        >
+          Correcto
+        </button>
+        <button
+          type="button"
+          class="respuesta-btn"
+          onclick="marcarRespuesta(this, 'p6', 0)"
+        >
+          Incorrecto
+        </button>
+      </fieldset>
+
+      <fieldset>
+        <legend><strong>7. ¿En qué piso o sala estamos?</strong></legend>
+        <button
+          type="button"
+          class="respuesta-btn"
+          onclick="marcarRespuesta(this, 'p7', 1)"
+        >
+          Correcto
+        </button>
+        <button
+          type="button"
+          class="respuesta-btn"
+          onclick="marcarRespuesta(this, 'p7', 0)"
+        >
+          Incorrecto
+        </button>
+      </fieldset>
+
+      <fieldset>
+        <legend><strong>8. ¿En qué ciudad o pueblo estamos?</strong></legend>
+        <button
+          type="button"
+          class="respuesta-btn"
+          onclick="marcarRespuesta(this, 'p8', 1)"
+        >
+          Correcto
+        </button>
+        <button
+          type="button"
+          class="respuesta-btn"
+          onclick="marcarRespuesta(this, 'p8', 0)"
+        >
+          Incorrecto
+        </button>
+      </fieldset>
+
+      <fieldset>
+        <legend><strong>9. ¿En qué municipio estamos?</strong></legend>
+        <button
+          type="button"
+          class="respuesta-btn"
+          onclick="marcarRespuesta(this, 'p9', 1)"
+        >
+          Correcto
+        </button>
+        <button
+          type="button"
+          class="respuesta-btn"
+          onclick="marcarRespuesta(this, 'p9', 0)"
+        >
+          Incorrecto
+        </button>
+      </fieldset>
+
+      <fieldset>
+        <legend><strong>10. ¿En qué país estamos?</strong></legend>
+        <button
+          type="button"
+          class="respuesta-btn"
+          onclick="marcarRespuesta(this, 'p10', 1)"
+        >
+          Correcto
+        </button>
+        <button
+          type="button"
+          class="respuesta-btn"
+          onclick="marcarRespuesta(this, 'p10', 0)"
+        >
+          Incorrecto
+        </button>
       </fieldset>
 
       <div class="botones">
@@ -118,20 +282,42 @@
     <footer>ESISCOM &copy; 2025</footer>
 
     <script>
-      function cerrarModal() {
-        document.getElementById("modalInstrucciones").style.display = "none";
+      const respuestas = {};
+
+      function marcarRespuesta(boton, pregunta, valor) {
+        respuestas[pregunta] = valor;
+        const botones = boton.parentElement.querySelectorAll(".respuesta-btn");
+        botones.forEach((btn) =>
+          btn.classList.remove("correcto-activo", "incorrecto-activo")
+        );
+        if (valor === 1) {
+          boton.classList.add("correcto-activo");
+        } else {
+          boton.classList.add("incorrecto-activo");
+        }
       }
 
       function guardarBackup() {
         const registros = JSON.parse(
           localStorage.getItem("encuestados") || "[]"
         );
-        if (registros.length === 0) return alert("No hay datos para guardar.");
+        const idActual = localStorage.getItem("encuestadoActual");
+        const index = registros.findIndex((e) => e.id === idActual);
+
+        if (index === -1) {
+          alert("No se encontró al encuestado actual.");
+          return;
+        }
+
+        registros[index].folstein = respuestas;
+        localStorage.setItem("encuestados", JSON.stringify(registros));
+
         const encabezados = Object.keys(registros[0]);
         const filas = registros.map((obj) =>
-          encabezados.map((k) => `"${obj[k]}"`).join(",")
+          encabezados.map((k) => `"${JSON.stringify(obj[k])}"`).join(",")
         );
-        const csv = [encabezados.join(","), ...filas].join("\\n");
+        const csv = [encabezados.join(","), ...filas].join("\n");
+
         const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
@@ -139,6 +325,10 @@
         a.download = "respaldo_encuestados.csv";
         a.click();
         URL.revokeObjectURL(url);
+      }
+
+      function cerrarModal() {
+        document.getElementById("modalInstrucciones").style.display = "none";
       }
     </script>
   </body>

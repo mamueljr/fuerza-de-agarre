@@ -121,3 +121,28 @@ footer {
   background-color: #f44336;
   color: white;
 }
+
+.respuesta-btn {
+  font-size: 20px;
+  padding: 16px 28px;
+  margin: 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  min-width: 140px;
+}
+
+.correcto-activo {
+  background-color: #4caf50 !important;
+  color: white;
+}
+
+.incorrecto-activo {
+  background-color: #f44336 !important;
+  color: white;
+}
+
+.desactivado {
+  opacity: 0.5;
+  pointer-events: none;
+}
