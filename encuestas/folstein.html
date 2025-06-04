@@ -5,62 +5,6 @@
     <title>Encuesta Folstein (MMSE)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../css/style.css" />
-    <style>
-      .modal-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(40, 0, 60, 0.95);
-        color: white;
-        z-index: 9999;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-        overflow-y: auto;
-      }
-
-      .modal-contenido {
-        max-width: 90%;
-        max-height: 90vh;
-        text-align: left;
-        background-color: transparent;
-        padding: 20px;
-        border-radius: 10px;
-        font-size: 16px;
-        line-height: 1.4;
-        overflow-y: auto;
-      }
-
-      .modal-contenido button {
-        display: block;
-        margin: 20px auto 0;
-        font-size: 18px;
-        padding: 10px 25px;
-      }
-
-      .respuesta-btn {
-        font-size: 20px;
-        padding: 16px 28px;
-        margin: 10px;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        min-width: 140px;
-      }
-
-      .correcto-activo {
-        background-color: #4caf50 !important;
-        color: white;
-      }
-
-      .incorrecto-activo {
-        background-color: #f44336 !important;
-        color: white;
-      }
-    </style>
   </head>
   <body>
     <h1>Test de Folstein (Mini-Mental)</h1>
@@ -276,6 +220,9 @@
         >
           Cancelar
         </button>
+        <button type="button" class="guardar" onclick="continuar()">
+          Continuar con la segunda parte
+        </button>
       </div>
     </form>
 
@@ -329,6 +276,11 @@
 
       function cerrarModal() {
         document.getElementById("modalInstrucciones").style.display = "none";
+      }
+
+      function continuar() {
+        guardarBackup();
+        window.location.href = "folstein2.html";
       }
     </script>
   </body>
