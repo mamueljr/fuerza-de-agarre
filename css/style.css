@@ -55,3 +55,29 @@ footer {
   text-align: left;
   box-shadow: 0 0 6px rgba(0,0,0,0.1);
 }
+
+.tabla {
+  width: 90%;
+  max-width: 800px;
+  margin: 0 auto 40px;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 6px rgba(0,0,0,0.1);
+}
+
+.tabla th, .tabla td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.tabla th {
+  background-color: #4a90e2;
+  color: white;
+}
+
+.tabla tr:hover {
+  background-color: #f1f1f1;
+}

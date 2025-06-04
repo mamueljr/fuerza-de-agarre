@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Encuestas Completas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <h1>Encuestados con Evaluación Completa</h1>
+
+    <table id="tablaCompletas" class="tabla">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Edad</th>
+          <th>Sexo</th>
+          <th>Fecha de Registro</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <p id="mensajeVacio" style="display: none">
+      No hay encuestados con encuestas completas.
+    </p>
+
+    <button onclick="location.href='../index.html'">⬅️ Volver al menú</button>
+
+    <footer>ESISCOM &copy; 2025</footer>
+
+    <script>
+      const tbody = document.querySelector("#tablaCompletas tbody");
+      const mensajeVacio = document.getElementById("mensajeVacio");
+
+      const encuestados = JSON.parse(
+        localStorage.getItem("encuestados") || "[]"
+      );
+
+      const completos = encuestados.filter(
+        (e) => e.sf36 && e.seniorFitness && e.folstein && e.dinamometria
+      );
+
+      if (completos.length === 0) {
+        document.querySelector("table").style.display = "none";
+        mensajeVacio.style.display = "block";
+      } else {
+        completos.forEach((e) => {
+          const fila = document.createElement("tr");
+          fila.innerHTML = `
+          <td>${e.id}</td>
+          <td>${e.edad}</td>
+          <td>${e.sexo}</td>
+          <td>${new Date(e.fechaRegistro).toLocaleDateString()}</td>
+        `;
+          tbody.appendChild(fila);
+        });
+      }
+    </script>
+  </body>
+</html>
