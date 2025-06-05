@@ -92,19 +92,38 @@
         <legend>
           <strong>Seleccione lo que respondió el adulto mayor:</strong>
         </legend>
-        <select id="respuestaCalculo" class="grande" required>
-          <option value="">Seleccione una opción</option>
-          <option>a) 30,27</option>
-          <option>b) 30,27,24</option>
-          <option>c) 20,27,24,21</option>
-          <option>d) 20,27,24,21,18</option>
-          <option>e) 30,27,24,21,18,1</option>
-          <option>f) O</option>
-          <option>g) OD</option>
-          <option>h) ODN</option>
-          <option>i) ODNU</option>
-          <option>j) ODNUM</option>
-        </select>
+        <div class="opciones-botones" id="opcionesCalculo">
+          <button type="button" onclick="seleccionarOpcion(this, 'a')">
+            a) 30,27
+          </button>
+          <button type="button" onclick="seleccionarOpcion(this, 'b')">
+            b) 30,27,24
+          </button>
+          <button type="button" onclick="seleccionarOpcion(this, 'c')">
+            c) 20,27,24,21
+          </button>
+          <button type="button" onclick="seleccionarOpcion(this, 'd')">
+            d) 20,27,24,21,18
+          </button>
+          <button type="button" onclick="seleccionarOpcion(this, 'e')">
+            e) 30,27,24,21,18,1
+          </button>
+          <button type="button" onclick="seleccionarOpcion(this, 'f')">
+            f) O
+          </button>
+          <button type="button" onclick="seleccionarOpcion(this, 'g')">
+            g) OD
+          </button>
+          <button type="button" onclick="seleccionarOpcion(this, 'h')">
+            h) ODN
+          </button>
+          <button type="button" onclick="seleccionarOpcion(this, 'i')">
+            i) ODNU
+          </button>
+          <button type="button" onclick="seleccionarOpcion(this, 'j')">
+            j) ODNUM
+          </button>
+        </div>
       </fieldset>
 
       <!-- PALABRAS RECORDADAS -->
@@ -127,6 +146,34 @@
             readonly
           />
           <button type="button" onclick="ajustarRecuerdo(1)">+</button>
+        </div>
+      </fieldset>
+
+      <div class="instrucciones">
+        <p>Le mostraré dos objetos y le pediré que me diga qué son.</p>
+        <p><strong>(EL ENCUESTADOR LE MUESTRA UN LÁPIZ)</strong></p>
+        <p>Dígame: <strong>¿Qué es esto?</strong></p>
+      </div>
+
+      <fieldset>
+        <legend>
+          <strong
+            >Respuesta del encuestado sobre el objeto mostrado (lápiz):</strong
+          >
+        </legend>
+        <div class="opciones-botones" id="lugarObjeto1">
+          <button
+            type="button"
+            onclick="seleccionarBinario(this, 'objeto1', 1)"
+          >
+            Correcto
+          </button>
+          <button
+            type="button"
+            onclick="seleccionarBinario(this, 'objeto1', 0)"
+          >
+            Incorrecto
+          </button>
         </div>
       </fieldset>
 
@@ -196,8 +243,7 @@
         registros[index].folstein.repeticionesMemoria = parseInt(
           document.getElementById("repeticiones").value
         );
-        registros[index].folstein.calculoRespuesta =
-          document.getElementById("respuestaCalculo").value;
+        registros[index].folstein.calculo = opcionSeleccionada;
         registros[index].folstein.palabrasRecordadas = parseInt(
           document.getElementById("palabrasRecordadas").value
         );
@@ -217,12 +263,42 @@
         a.download = "respaldo_encuestados.csv";
         a.click();
         URL.revokeObjectURL(url);
+        registros[index].folstein.objeto1 = respuestasBinarias["objeto1"];
       }
 
       function continuar() {
         guardarBackup();
         alert("Encuesta completada. Puede regresar al menú principal.");
         window.location.href = "../index.html";
+      }
+
+      let opcionSeleccionada = "";
+
+      function seleccionarOpcion(boton, letra) {
+        opcionSeleccionada = letra;
+
+        const botones = document.querySelectorAll("#opcionesCalculo button");
+        botones.forEach((btn) => btn.classList.remove("seleccionado"));
+
+        boton.classList.add("seleccionado");
+      }
+
+      const respuestasBinarias = {};
+
+      function seleccionarBinario(boton, clave, valor) {
+        respuestasBinarias[clave] = valor;
+
+        const contenedor = boton.parentElement;
+        const botones = contenedor.querySelectorAll("button");
+        botones.forEach((btn) =>
+          btn.classList.remove("correcto-activo", "incorrecto-activo")
+        );
+
+        if (valor === 1) {
+          boton.classList.add("correcto-activo");
+        } else {
+          boton.classList.add("incorrecto-activo");
+        }
       }
     </script>
   </body>
