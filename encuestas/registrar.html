@@ -72,7 +72,9 @@
           localStorage.getItem("encuestados") || "[]"
         );
         registros.push(encuestado);
+        //localStorage.setItem("encuestados", JSON.stringify(registros));
         localStorage.setItem("encuestados", JSON.stringify(registros));
+        localStorage.setItem("encuestadoActual", id);
 
         exportarCSV();
         window.location.href = "folstein.html";

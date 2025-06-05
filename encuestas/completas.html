@@ -43,7 +43,17 @@
         localStorage.getItem("encuestados") || "[]"
       );
 
-      const completos = encuestados.filter((e) => e.folstein && e.dinamometria);
+      const completos = encuestados.filter(
+        (e) =>
+          e.folstein &&
+          typeof e.folstein === "object" &&
+          e.dinamometria &&
+          typeof e.dinamometria === "object" &&
+          Object.keys(e.dinamometria).length > 0
+      );
+
+      // Si se desea filtrar por encuestas completas, descomentar la siguiente línea
+      //const completos = encuestados.filter((e) => e.folstein && e.dinamometria);
 
       if (completos.length === 0) {
         document.querySelector("table").style.display = "none";
