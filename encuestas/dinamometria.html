@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Prueba de Dinamometría</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <style>
+      .pantalla {
+        text-align: center;
+        margin-top: 2rem;
+        font-size: 1.2rem;
+        color: #fff6a9;
+        background-color: #612b5c;
+        padding: 2rem;
+        border-radius: 1rem;
+      }
+      .numero-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+      .numero-input {
+        font-size: 1.5rem;
+        text-align: center;
+        width: 100px;
+      }
+      .ajuste-btn {
+        font-size: 1.5rem;
+        padding: 0.3rem 1rem;
+      }
+      button {
+        font-size: 1.2rem;
+        padding: 10px 20px;
+        margin-top: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="pantalla">
+      <p>
+        Hola.<br /><br />
+        Esta prueba la realizará de pie.<br /><br />
+        Previo a la prueba mediré el tamaño de su mano con una plantilla
+        milimétrica.<br /><br />
+        Antes de hacer la prueba le mostraré cómo realizarla, Ok.<br /><br />
+        Cuando yo le indique, con la mayor fuerza que tenga, deberá de apretar
+        de manera breve con su mano sin realizar ningún otro movimiento
+        corporal.<br /><br />
+        Se realizarán dos pruebas para cada mano, dando un tiempo de descanso
+        entre cada prueba.<br /><br />
+        Le pido escuchar atentamente las instrucciones.<br /><br />
+        Antes de iniciar ¿tiene usted alguna duda o inquietud que le gustaría
+        comentar o resolver?
+      </p>
+
+      <form>
+        <h2>Intentos de dinamometría</h2>
+
+        <p><strong>Primer intento – Mano dominante</strong></p>
+        <div class="numero-container">
+          <button
+            type="button"
+            class="ajuste-btn"
+            onclick="ajustar('dom1', -0.1)"
+          >
+            −
+          </button>
+          <input
+            type="number"
+            id="dom1"
+            class="numero-input"
+            min="0"
+            step="0.1"
+            value="0"
+          />
+          <button
+            type="button"
+            class="ajuste-btn"
+            onclick="ajustar('dom1', 0.1)"
+          >
+            +
+          </button>
+        </div>
+
+        <p><strong>Segundo intento – Mano dominante</strong></p>
+        <div class="numero-container">
+          <button
+            type="button"
+            class="ajuste-btn"
+            onclick="ajustar('dom2', -0.1)"
+          >
+            −
+          </button>
+          <input
+            type="number"
+            id="dom2"
+            class="numero-input"
+            min="0"
+            step="0.1"
+            value="0"
+          />
+          <button
+            type="button"
+            class="ajuste-btn"
+            onclick="ajustar('dom2', 0.1)"
+          >
+            +
+          </button>
+        </div>
+
+        <p><strong>Primer intento – Mano no dominante</strong></p>
+        <div class="numero-container">
+          <button
+            type="button"
+            class="ajuste-btn"
+            onclick="ajustar('nodom1', -0.1)"
+          >
+            −
+          </button>
+          <input
+            type="number"
+            id="nodom1"
+            class="numero-input"
+            min="0"
+            step="0.1"
+            value="0"
+          />
+          <button
+            type="button"
+            class="ajuste-btn"
+            onclick="ajustar('nodom1', 0.1)"
+          >
+            +
+          </button>
+        </div>
+
+        <p><strong>Segundo intento – Mano no dominante</strong></p>
+        <div class="numero-container">
+          <button
+            type="button"
+            class="ajuste-btn"
+            onclick="ajustar('nodom2', -0.1)"
+          >
+            −
+          </button>
+          <input
+            type="number"
+            id="nodom2"
+            class="numero-input"
+            min="0"
+            step="0.1"
+            value="0"
+          />
+          <button
+            type="button"
+            class="ajuste-btn"
+            onclick="ajustar('nodom2', 0.1)"
+          >
+            +
+          </button>
+        </div>
+
+        <br />
+        <button type="button" onclick="guardarDatos()">
+          Guardar y regresar al menú
+        </button>
+      </form>
+    </div>
+
+    <script>
+      function ajustar(id, delta) {
+        const input = document.getElementById(id);
+        let valor = parseFloat(input.value) || 0;
+        valor = Math.max(0, valor + delta);
+        input.value = valor.toFixed(1);
+      }
+
+      function guardarDatos() {
+        const registros = JSON.parse(
+          localStorage.getItem("encuestados") || "[]"
+        );
+        const idActual = localStorage.getItem("encuestadoActual");
+        const index = registros.findIndex((e) => e.id === idActual);
+
+        if (index === -1) {
+          alert("No se encontró al encuestado actual.");
+          return;
+        }
+
+        const dinamometria = {
+          manoDominante1:
+            parseFloat(document.getElementById("dom1").value) || 0,
+          manoDominante2:
+            parseFloat(document.getElementById("dom2").value) || 0,
+          manoNoDominante1:
+            parseFloat(document.getElementById("nodom1").value) || 0,
+          manoNoDominante2:
+            parseFloat(document.getElementById("nodom2").value) || 0,
+        };
+
+        registros[index].dinamometria = dinamometria;
+        registros[index].dinamometriaCompleta = true;
+        localStorage.setItem("encuestados", JSON.stringify(registros));
+        exportarCSV();
+        alert("Respaldo guardado. Regresando al menú principal.");
+        window.location.href = "../index.html";
+      }
+
+      function exportarCSV() {
+        const registros = JSON.parse(
+          localStorage.getItem("encuestados") || "[]"
+        );
+
+        const planos = registros.map((r) => {
+          const plano = { ...r };
+          if (typeof r.folstein === "object") {
+            Object.entries(r.folstein).forEach(([k, v]) => {
+              plano[`folstein_${k}`] = v;
+            });
+            delete plano.folstein;
+          }
+          if (typeof r.dinamometria === "object") {
+            Object.entries(r.dinamometria).forEach(([k, v]) => {
+              plano[`dinamometria_${k}`] = v;
+            });
+            delete plano.dinamometria;
+          }
+          return plano;
+        });
+
+        const encabezados = Array.from(
+          planos.reduce((acc, obj) => {
+            Object.keys(obj).forEach((k) => acc.add(k));
+            return acc;
+          }, new Set())
+        );
+
+        const filas = planos.map((obj) =>
+          encabezados.map((k) => `"${obj[k] ?? ""}"`).join(",")
+        );
+
+        const csv = [encabezados.join(","), ...filas].join("\n");
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "respaldo_encuestados.csv";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    </script>
+  </body>
+</html>

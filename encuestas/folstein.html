@@ -291,14 +291,30 @@
       }
 
       function continuar() {
-        guardarBackup();
         const registros = JSON.parse(
           localStorage.getItem("encuestados") || "[]"
         );
         const ultimo = registros[registros.length - 1];
-        if (ultimo && ultimo.id) {
-          localStorage.setItem("encuestadoActual", ultimo.id);
+
+        if (!ultimo || !ultimo.id) {
+          alert("No se encontró encuestado válido.");
+          return;
         }
+
+        // Guardar respuestas en el campo folstein
+        if (!ultimo.folstein || typeof ultimo.folstein !== "object") {
+          ultimo.folstein = {};
+        }
+
+        // Copiar respuestas del objeto temporal
+        for (const [clave, valor] of Object.entries(respuestas)) {
+          ultimo.folstein[clave] = valor;
+        }
+
+        localStorage.setItem("encuestados", JSON.stringify(registros));
+        localStorage.setItem("encuestadoActual", ultimo.id);
+
+        exportarCSV();
         window.location.href = "folstein2.html";
       }
     </script>

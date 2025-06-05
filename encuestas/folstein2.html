@@ -442,35 +442,35 @@
           return;
         }
 
-        if (
-          !registros[index].folstein ||
-          typeof registros[index].folstein !== "object"
-        ) {
-          registros[index].folstein = {};
-        }
+        // Recuperar respuestas anteriores si existen
+        const prevFolstein = registros[index].folstein ?? {};
 
-        const folstein = registros[index].folstein;
-        folstein.objetosRecordados = parseInt(
-          document.getElementById("recordados").value,
-          10
-        );
-        folstein.repeticionesMemoria = parseInt(
-          document.getElementById("repeticiones").value,
-          10
-        );
-        folstein.calculo = opcionSeleccionada;
-        folstein.palabrasRecordadas = parseInt(
-          document.getElementById("palabrasRecordadas").value,
-          10
-        );
-        folstein.objeto1 = respuestasBinarias["objeto1"];
-        folstein.objeto2 = respuestasBinarias["objeto2"] ?? null;
-        folstein.frase = respuestasBinarias["frase"] ?? null;
-        folstein.ordenCompuesta = opcionOrden;
-        folstein.cerrarOjos = opcionCerrarOjos;
-        folstein.fraseEscrita = opcionFraseEscrita;
-        folstein.dibujo = opcionDibujo;
+        // Fusionar respuestas nuevas con las anteriores
+        const nuevoFolstein = {
+          ...prevFolstein,
+          objetosRecordados: parseInt(
+            document.getElementById("recordados").value,
+            10
+          ),
+          repeticionesMemoria: parseInt(
+            document.getElementById("repeticiones").value,
+            10
+          ),
+          calculo: opcionSeleccionada,
+          palabrasRecordadas: parseInt(
+            document.getElementById("palabrasRecordadas").value,
+            10
+          ),
+          objeto1: respuestasBinarias["objeto1"],
+          objeto2: respuestasBinarias["objeto2"] ?? null,
+          frase: respuestasBinarias["frase"] ?? null,
+          ordenCompuesta: opcionOrden,
+          cerrarOjos: opcionCerrarOjos,
+          fraseEscrita: opcionFraseEscrita,
+          dibujo: opcionDibujo,
+        };
 
+        registros[index].folstein = nuevoFolstein;
         localStorage.setItem("encuestados", JSON.stringify(registros));
 
         exportarCSV();
