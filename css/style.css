@@ -205,3 +205,41 @@ footer {
   background-color: #f44336 !important;
   color: white;
 }
+
+.instrucciones {
+  background-color: #5a2b66;
+  color: #ffff88;
+  padding: 30px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 18px;
+  border-radius: 12px;
+}
+
+.numero-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin: 30px auto;
+}
+
+.numero-container button {
+  font-size: 26px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: none;
+  background-color: #4a90e2;
+  color: white;
+  cursor: pointer;
+}
+
+#recordados {
+  font-size: 22px;
+  text-align: center;
+  width: 80px;
+  height: 50px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}

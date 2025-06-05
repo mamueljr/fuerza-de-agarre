@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Folstein - Segunda Parte</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body>
+    <h1>Test de Folstein - Parte 2</h1>
+
+    <div class="instrucciones">
+      <p>
+        Ahora le voy a nombrar tres objetos. Después de que se los diga, le voy
+        a pedir que repita en voz alta hasta que los recuerde, en cualquier
+        orden.
+      </p>
+      <p>
+        <strong
+          >Recuerde los objetos porque se los voy a preguntar más
+          adelante.</strong
+        >
+      </p>
+      <p style="font-weight: bold">
+        LEA LOS NOMBRES DE LOS OBJETOS DESPACIO Y PAREJO<br />
+        APROXIMADAMENTE UNA PALABRA POR CADA DOS SEGUNDOS
+      </p>
+      <p style="font-size: 20px; font-weight: bold">Balón, bandera, árbol.</p>
+    </div>
+
+    <form class="form">
+      <fieldset>
+        <legend>
+          <strong>¿Cuántos objetos recuerda correctamente?</strong>
+        </legend>
+        <div class="numero-container">
+          <button type="button" onclick="ajustarNumero(-1)">−</button>
+          <input
+            type="number"
+            id="recordados"
+            value="0"
+            min="0"
+            max="3"
+            readonly
+          />
+          <button type="button" onclick="ajustarNumero(1)">+</button>
+        </div>
+      </fieldset>
+
+      <div class="botones">
+        <button type="button" class="guardar" onclick="guardarBackup()">
+          Guardar respaldo
+        </button>
+        <button
+          type="button"
+          class="cancelar"
+          onclick="location.href='../index.html'"
+        >
+          Cancelar
+        </button>
+        <button type="button" class="guardar" onclick="continuar()">
+          Continuar
+        </button>
+      </div>
+    </form>
+
+    <footer>ESISCOM &copy; 2025</footer>
+
+    <script>
+      function ajustarNumero(delta) {
+        const input = document.getElementById("recordados");
+        let valor = parseInt(input.value) || 0;
+        valor += delta;
+        if (valor >= 0 && valor <= 3) {
+          input.value = valor;
+        }
+      }
+
+      function guardarBackup() {
+        const registros = JSON.parse(
+          localStorage.getItem("encuestados") || "[]"
+        );
+        const idActual = localStorage.getItem("encuestadoActual");
+        const index = registros.findIndex((e) => e.id === idActual);
+
+        if (index === -1) {
+          alert("No se encontró al encuestado actual.");
+          return;
+        }
+
+        if (
+          !registros[index].folstein ||
+          typeof registros[index].folstein !== "object"
+        ) {
+          registros[index].folstein = {};
+        }
+
+        registros[index].folstein.objetosRecordados = parseInt(
+          document.getElementById("recordados").value
+        );
+        localStorage.setItem("encuestados", JSON.stringify(registros));
+
+        const encabezados = Object.keys(registros[0]);
+        const filas = registros.map((obj) =>
+          encabezados.map((k) => `"${JSON.stringify(obj[k])}"`).join(",")
+        );
+        const csv = [encabezados.join(","), ...filas].join("\n");
+
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "respaldo_encuestados.csv";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      function continuar() {
+        guardarBackup();
+        alert("Continúa la siguiente sección del test...");
+      }
+    </script>
+  </body>
+</html>
