@@ -94,12 +94,31 @@
         const registros = JSON.parse(
           localStorage.getItem("encuestados") || "[]"
         );
-        if (registros.length === 0) return;
-        const encabezados = Object.keys(registros[0]);
-        const filas = registros.map((obj) =>
-          encabezados.map((k) => `"${obj[k]}"`).join(",")
+
+        // Expandir campos folstein
+        const planos = registros.map((r) => {
+          const plano = { ...r };
+          if (typeof r.folstein === "object") {
+            Object.entries(r.folstein).forEach(([k, v]) => {
+              plano[`folstein_${k}`] = v;
+            });
+            delete plano.folstein;
+          }
+          return plano;
+        });
+
+        const encabezados = Array.from(
+          planos.reduce((acc, obj) => {
+            Object.keys(obj).forEach((k) => acc.add(k));
+            return acc;
+          }, new Set())
         );
-        const csv = [encabezados.join(","), ...filas].join("\\n");
+
+        const filas = planos.map((obj) =>
+          encabezados.map((k) => `"${obj[k] ?? ""}"`).join(",")
+        );
+
+        const csv = [encabezados.join(","), ...filas].join("\n");
         const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");

@@ -219,6 +219,113 @@
           </button>
         </div>
       </fieldset>
+      <div class="instrucciones">
+        <p>
+          Ahora le voy a dar unas indicaciones.<br />
+          Le pido escuchar con atención y hacer lo que le diré:
+        </p>
+        <p style="font-weight: bold">
+          "DOBLE UN PAPEL CON LA MANO DERECHA,<br />
+          DÓBLELO POR LA MITAD Y<br />
+          PÓNGALO EN EL SUELO"
+        </p>
+      </div>
+
+      <fieldset>
+        <legend>
+          <strong>Seleccione lo que hizo el adulto mayor:</strong>
+        </legend>
+        <div class="opciones-botones" id="ordenCompuesta">
+          <button type="button" onclick="seleccionarOpcion(this, 'a')">
+            a) Dobló el papel con la mano derecha
+          </button>
+          <button type="button" onclick="seleccionarOpcion(this, 'b')">
+            b) Dobló el papel con la mano derecha, por la mitad
+          </button>
+          <button type="button" onclick="seleccionarOpcion(this, 'c')">
+            c) Dobló el papel con la mano derecha, por la mitad y lo puso en el
+            suelo
+          </button>
+        </div>
+      </fieldset>
+
+      <div class="instrucciones">
+        <p>
+          <strong>EL ENCUESTADOR ESCRIBE</strong> en un papel:<br />“CIERRE LOS
+          OJOS”.
+        </p>
+        <p>
+          <strong>ENCUESTADOR:</strong><br />
+          Ahora le pido que lea lo que dice en el papel y haga lo que dice la
+          frase.
+        </p>
+      </div>
+
+      <fieldset>
+        <legend><strong>Respuesta del adulto mayor:</strong></legend>
+        <div class="opciones-botones" id="leerCerrarOjos">
+          <button type="button" onclick="seleccionarOpcion(this, 'a')">
+            a) Lee la frase y hace lo que dice la frase
+          </button>
+          <button type="button" onclick="seleccionarOpcion(this, 'b')">
+            b) No lee la frase y/o no hace lo que dice la frase
+          </button>
+        </div>
+      </fieldset>
+
+      <div class="instrucciones">
+        <p>
+          <strong>EL ENCUESTADOR LE PROPORCIONA</strong><br />
+          UNA HOJA EN BLANCO, UN LÁPIZ Y PAPEL AL ADULTO MAYOR PARA QUE ESCRIBA.
+        </p>
+        <p>
+          Ahora le pido que escriba una frase (con sujeto y predicado).<br />
+          <strong>EL ENCUESTADOR EVALÚA LO QUE ESCRIBE EL ADULTO MAYOR.</strong>
+        </p>
+      </div>
+
+      <fieldset>
+        <legend>
+          <strong>¿La frase escrita por el adulto mayor es correcta?</strong>
+        </legend>
+        <div class="opciones-botones" id="fraseEscrita">
+          <button type="button" onclick="seleccionarFraseEscrita(this, 'a')">
+            a) Respuesta correcta
+          </button>
+          <button type="button" onclick="seleccionarFraseEscrita(this, 'b')">
+            b) Respuesta errónea
+          </button>
+        </div>
+      </fieldset>
+
+      <div class="instrucciones">
+        <p>
+          Finalmente le pido que copie el dibujo que le estoy mostrando, tal y
+          como está.
+        </p>
+        <p>
+          <strong
+            >EL ENCUESTADOR TENDRÁ UN DIBUJO DE<br />
+            2 PENTÁGONOS INTERSECTADOS<br />
+            Y LE DARÁ LA HOJA AL ADULTO MAYOR PARA QUE LO REALICE.</strong
+          ><br />
+          EVALÚA LO QUE DIBUJA EL ADULTO MAYOR.
+        </p>
+      </div>
+
+      <fieldset>
+        <legend>
+          <strong>¿El dibujo realizado por el adulto mayor es correcto?</strong>
+        </legend>
+        <div class="opciones-botones" id="dibujo">
+          <button type="button" onclick="seleccionarDibujo(this, 'a')">
+            a) Respuesta correcta
+          </button>
+          <button type="button" onclick="seleccionarDibujo(this, 'b')">
+            b) Respuesta errónea
+          </button>
+        </div>
+      </fieldset>
 
       <!-- BOTONES -->
       <div class="botones">
@@ -240,7 +347,17 @@
 
     <footer>ESISCOM &copy; 2025</footer>
 
+    <!-- Parte del cuerpo y formulario se mantiene igual hasta los scripts al final -->
+
     <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const idActual = localStorage.getItem("encuestadoActual");
+        if (!idActual) {
+          alert("No se encontró un encuestado activo. Redirigiendo al inicio.");
+          window.location.href = "../index.html";
+        }
+      });
+
       function ajustarNumero(delta) {
         const input = document.getElementById("recordados");
         let valor = parseInt(input.value) || 0;
@@ -262,14 +379,66 @@
         if (valor >= 0 && valor <= 3) input.value = valor;
       }
 
+      let opcionSeleccionada = "";
+      let opcionOrden = "";
+      let opcionCerrarOjos = "";
+      let opcionFraseEscrita = "";
+      let opcionDibujo = "";
+      const respuestasBinarias = {};
+
+      function seleccionarOpcion(boton, letra) {
+        const contenedor = boton.parentElement;
+        const botones = contenedor.querySelectorAll("button");
+        botones.forEach((btn) => btn.classList.remove("seleccionado"));
+        boton.classList.add("seleccionado");
+
+        if (contenedor.id === "opcionesCalculo") opcionSeleccionada = letra;
+        else if (contenedor.id === "ordenCompuesta") opcionOrden = letra;
+        else if (contenedor.id === "leerCerrarOjos") opcionCerrarOjos = letra;
+      }
+
+      function seleccionarBinario(boton, clave, valor) {
+        respuestasBinarias[clave] = valor;
+        const botones = boton.parentElement.querySelectorAll("button");
+        botones.forEach((btn) =>
+          btn.classList.remove("correcto-activo", "incorrecto-activo")
+        );
+        if (valor === 1) boton.classList.add("correcto-activo");
+        else boton.classList.add("incorrecto-activo");
+      }
+
+      function seleccionarFraseEscrita(boton, letra) {
+        opcionFraseEscrita = letra;
+        const botones = boton.parentElement.querySelectorAll("button");
+        botones.forEach((btn) => btn.classList.remove("seleccionado"));
+        boton.classList.add("seleccionado");
+      }
+
+      function seleccionarDibujo(boton, letra) {
+        opcionDibujo = letra;
+        const botones = boton.parentElement.querySelectorAll("button");
+        botones.forEach((btn) => btn.classList.remove("seleccionado"));
+        boton.classList.add("seleccionado");
+      }
+
       function guardarBackup() {
         const registros = JSON.parse(
           localStorage.getItem("encuestados") || "[]"
         );
         const idActual = localStorage.getItem("encuestadoActual");
         const index = registros.findIndex((e) => e.id === idActual);
+
         if (index === -1) {
           alert("No se encontró al encuestado actual.");
+          return;
+        }
+
+        if (
+          !document.getElementById("recordados").value ||
+          !document.getElementById("repeticiones").value ||
+          !document.getElementById("palabrasRecordadas").value
+        ) {
+          alert("Por favor, complete todos los campos antes de guardar.");
           return;
         }
 
@@ -280,43 +449,32 @@
           registros[index].folstein = {};
         }
 
-        registros[index].folstein.objetosRecordados = parseInt(
-          document.getElementById("recordados").value
+        const folstein = registros[index].folstein;
+        folstein.objetosRecordados = parseInt(
+          document.getElementById("recordados").value,
+          10
         );
-        registros[index].folstein.repeticionesMemoria = parseInt(
-          document.getElementById("repeticiones").value
+        folstein.repeticionesMemoria = parseInt(
+          document.getElementById("repeticiones").value,
+          10
         );
-        registros[index].folstein.calculo = opcionSeleccionada;
-        registros[index].folstein.palabrasRecordadas = parseInt(
-          document.getElementById("palabrasRecordadas").value
+        folstein.calculo = opcionSeleccionada;
+        folstein.palabrasRecordadas = parseInt(
+          document.getElementById("palabrasRecordadas").value,
+          10
         );
+        folstein.objeto1 = respuestasBinarias["objeto1"];
+        folstein.objeto2 = respuestasBinarias["objeto2"] ?? null;
+        folstein.frase = respuestasBinarias["frase"] ?? null;
+        folstein.ordenCompuesta = opcionOrden;
+        folstein.cerrarOjos = opcionCerrarOjos;
+        folstein.fraseEscrita = opcionFraseEscrita;
+        folstein.dibujo = opcionDibujo;
 
         localStorage.setItem("encuestados", JSON.stringify(registros));
 
-        const encabezados = Object.keys(registros[0]);
-        const filas = registros.map((obj) =>
-          encabezados.map((k) => `"${JSON.stringify(obj[k])}"`).join(",")
-        );
-        const csv = [encabezados.join(","), ...filas].join("\n");
-
-        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "respaldo_encuestados.csv";
-        a.click();
-        URL.revokeObjectURL(url);
-        registros[index].folstein.objeto1 = respuestasBinarias["objeto1"];
-        registros[index].folstein.objeto2 = respuestasBinarias.hasOwnProperty(
-          "objeto2"
-        )
-          ? respuestasBinarias["objeto2"]
-          : null;
-        registros[index].folstein.frase = respuestasBinarias.hasOwnProperty(
-          "frase"
-        )
-          ? respuestasBinarias["frase"]
-          : null;
+        exportarCSV();
+        alert("Respaldo guardado.");
       }
 
       function continuar() {
@@ -325,33 +483,41 @@
         window.location.href = "../index.html";
       }
 
-      let opcionSeleccionada = "";
-
-      function seleccionarOpcion(boton, letra) {
-        opcionSeleccionada = letra;
-
-        const botones = document.querySelectorAll("#opcionesCalculo button");
-        botones.forEach((btn) => btn.classList.remove("seleccionado"));
-
-        boton.classList.add("seleccionado");
-      }
-
-      const respuestasBinarias = {};
-
-      function seleccionarBinario(boton, clave, valor) {
-        respuestasBinarias[clave] = valor;
-
-        const contenedor = boton.parentElement;
-        const botones = contenedor.querySelectorAll("button");
-        botones.forEach((btn) =>
-          btn.classList.remove("correcto-activo", "incorrecto-activo")
+      function exportarCSV() {
+        const registros = JSON.parse(
+          localStorage.getItem("encuestados") || "[]"
         );
 
-        if (valor === 1) {
-          boton.classList.add("correcto-activo");
-        } else {
-          boton.classList.add("incorrecto-activo");
-        }
+        const planos = registros.map((r) => {
+          const plano = { ...r };
+          if (typeof r.folstein === "object") {
+            Object.entries(r.folstein).forEach(([k, v]) => {
+              plano[`folstein_${k}`] = v;
+            });
+            delete plano.folstein;
+          }
+          return plano;
+        });
+
+        const encabezados = Array.from(
+          planos.reduce((acc, obj) => {
+            Object.keys(obj).forEach((k) => acc.add(k));
+            return acc;
+          }, new Set())
+        );
+
+        const filas = planos.map((obj) =>
+          encabezados.map((k) => `"${obj[k] ?? ""}"`).join(",")
+        );
+
+        const csv = [encabezados.join(","), ...filas].join("\n");
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "respaldo_encuestados.csv";
+        a.click();
+        URL.revokeObjectURL(url);
       }
     </script>
   </body>
