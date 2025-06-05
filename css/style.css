@@ -234,6 +234,17 @@ footer {
   cursor: pointer;
 }
 
+.numero-input {
+  font-size: 22px;
+  text-align: center;
+  width: 80px;
+  height: 50px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+
 #recordados {
   font-size: 22px;
   text-align: center;

@@ -29,6 +29,7 @@
     </div>
 
     <form class="form">
+      <!-- OBJETOS RECORDADOS -->
       <fieldset>
         <legend>
           <strong>¿Cuántos objetos recuerda correctamente?</strong>
@@ -38,6 +39,7 @@
           <input
             type="number"
             id="recordados"
+            class="numero-input"
             value="0"
             min="0"
             max="3"
@@ -47,6 +49,88 @@
         </div>
       </fieldset>
 
+      <!-- REPETICIONES -->
+      <fieldset>
+        <legend>
+          <strong
+            >Número de repeticiones que necesitó el adulto mayor para memorizar
+            las tres palabras:</strong
+          >
+        </legend>
+        <div class="numero-container">
+          <button type="button" onclick="ajustarRepeticiones(-1)">−</button>
+          <input
+            type="number"
+            id="repeticiones"
+            class="numero-input"
+            value="0"
+            min="0"
+            max="100"
+            readonly
+          />
+          <button type="button" onclick="ajustarRepeticiones(1)">+</button>
+        </div>
+      </fieldset>
+
+      <!-- CÁLCULO / MUNDO AL REVÉS -->
+      <div class="instrucciones">
+        <p>
+          Si tiene 30 pesos y me va dando de tres en tres,<br />
+          ¿Cuántos le van quedando?
+        </p>
+        <p><strong>DETENGA LA PRUEBA TRAS 5 SUSTRACCIONES.</strong></p>
+        <p>
+          <strong>
+            SI EL SUJETO NO PUEDE REALIZAR ESTA PRUEBA, PÍDALE QUE DELETREE LA
+            PALABRA<br />
+            mundo<br />AL REVÉS
+          </strong>
+        </p>
+      </div>
+
+      <fieldset>
+        <legend>
+          <strong>Seleccione lo que respondió el adulto mayor:</strong>
+        </legend>
+        <select id="respuestaCalculo" class="grande" required>
+          <option value="">Seleccione una opción</option>
+          <option>a) 30,27</option>
+          <option>b) 30,27,24</option>
+          <option>c) 20,27,24,21</option>
+          <option>d) 20,27,24,21,18</option>
+          <option>e) 30,27,24,21,18,1</option>
+          <option>f) O</option>
+          <option>g) OD</option>
+          <option>h) ODN</option>
+          <option>i) ODNU</option>
+          <option>j) ODNUM</option>
+        </select>
+      </fieldset>
+
+      <!-- PALABRAS RECORDADAS -->
+      <fieldset>
+        <legend>
+          <strong
+            >Ahora dígame las tres palabras que le pedí memorizar (BALÓN,
+            BANDERA, ÁRBOL)</strong
+          >
+        </legend>
+        <div class="numero-container">
+          <button type="button" onclick="ajustarRecuerdo(-1)">−</button>
+          <input
+            type="number"
+            id="palabrasRecordadas"
+            class="numero-input"
+            value="0"
+            min="0"
+            max="3"
+            readonly
+          />
+          <button type="button" onclick="ajustarRecuerdo(1)">+</button>
+        </div>
+      </fieldset>
+
+      <!-- BOTONES -->
       <div class="botones">
         <button type="button" class="guardar" onclick="guardarBackup()">
           Guardar respaldo
@@ -59,7 +143,7 @@
           Cancelar
         </button>
         <button type="button" class="guardar" onclick="continuar()">
-          Continuar
+          Finalizar
         </button>
       </div>
     </form>
@@ -71,9 +155,21 @@
         const input = document.getElementById("recordados");
         let valor = parseInt(input.value) || 0;
         valor += delta;
-        if (valor >= 0 && valor <= 3) {
-          input.value = valor;
-        }
+        if (valor >= 0 && valor <= 3) input.value = valor;
+      }
+
+      function ajustarRepeticiones(delta) {
+        const input = document.getElementById("repeticiones");
+        let valor = parseInt(input.value) || 0;
+        valor += delta;
+        if (valor >= 0 && valor <= 100) input.value = valor;
+      }
+
+      function ajustarRecuerdo(delta) {
+        const input = document.getElementById("palabrasRecordadas");
+        let valor = parseInt(input.value) || 0;
+        valor += delta;
+        if (valor >= 0 && valor <= 3) input.value = valor;
       }
 
       function guardarBackup() {
@@ -82,7 +178,6 @@
         );
         const idActual = localStorage.getItem("encuestadoActual");
         const index = registros.findIndex((e) => e.id === idActual);
-
         if (index === -1) {
           alert("No se encontró al encuestado actual.");
           return;
@@ -98,6 +193,15 @@
         registros[index].folstein.objetosRecordados = parseInt(
           document.getElementById("recordados").value
         );
+        registros[index].folstein.repeticionesMemoria = parseInt(
+          document.getElementById("repeticiones").value
+        );
+        registros[index].folstein.calculoRespuesta =
+          document.getElementById("respuestaCalculo").value;
+        registros[index].folstein.palabrasRecordadas = parseInt(
+          document.getElementById("palabrasRecordadas").value
+        );
+
         localStorage.setItem("encuestados", JSON.stringify(registros));
 
         const encabezados = Object.keys(registros[0]);
@@ -117,7 +221,8 @@
 
       function continuar() {
         guardarBackup();
-        alert("Continúa la siguiente sección del test...");
+        alert("Encuesta completada. Puede regresar al menú principal.");
+        window.location.href = "../index.html";
       }
     </script>
   </body>
