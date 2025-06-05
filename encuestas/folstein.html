@@ -292,6 +292,13 @@
 
       function continuar() {
         guardarBackup();
+        const registros = JSON.parse(
+          localStorage.getItem("encuestados") || "[]"
+        );
+        const ultimo = registros[registros.length - 1];
+        if (ultimo && ultimo.id) {
+          localStorage.setItem("encuestadoActual", ultimo.id);
+        }
         window.location.href = "folstein2.html";
       }
     </script>
