@@ -177,6 +177,49 @@
         </div>
       </fieldset>
 
+      <div class="instrucciones">
+        <p><strong>(EL ENCUESTADOR LE MUESTRA UN RELOJ DE PULSERA)</strong></p>
+        <p>Dígame: <strong>¿Qué es eso?</strong></p>
+      </div>
+
+      <fieldset>
+        <legend>
+          <strong
+            >Respuesta del encuestado sobre el objeto mostrado (reloj):</strong
+          >
+        </legend>
+        <div class="opciones-botones" id="lugarObjeto2">
+          <button
+            type="button"
+            onclick="seleccionarBinario(this, 'objeto2', 1)"
+          >
+            Correcto
+          </button>
+          <button
+            type="button"
+            onclick="seleccionarBinario(this, 'objeto2', 0)"
+          >
+            Incorrecto
+          </button>
+        </div>
+      </fieldset>
+      <div class="instrucciones">
+        <p><strong>AHORA REPITA LA FRASE:</strong></p>
+        <p>“Ni sí, ni no, ni pero”<br />ó<br />“En un trigal había 5 perros”</p>
+      </div>
+
+      <fieldset>
+        <legend><strong>¿Repitió correctamente la frase?</strong></legend>
+        <div class="opciones-botones" id="fraseRepetida">
+          <button type="button" onclick="seleccionarBinario(this, 'frase', 1)">
+            Correcto
+          </button>
+          <button type="button" onclick="seleccionarBinario(this, 'frase', 0)">
+            Incorrecto
+          </button>
+        </div>
+      </fieldset>
+
       <!-- BOTONES -->
       <div class="botones">
         <button type="button" class="guardar" onclick="guardarBackup()">
@@ -264,6 +307,16 @@
         a.click();
         URL.revokeObjectURL(url);
         registros[index].folstein.objeto1 = respuestasBinarias["objeto1"];
+        registros[index].folstein.objeto2 = respuestasBinarias.hasOwnProperty(
+          "objeto2"
+        )
+          ? respuestasBinarias["objeto2"]
+          : null;
+        registros[index].folstein.frase = respuestasBinarias.hasOwnProperty(
+          "frase"
+        )
+          ? respuestasBinarias["frase"]
+          : null;
       }
 
       function continuar() {
