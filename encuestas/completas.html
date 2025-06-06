@@ -15,6 +15,7 @@
           <th>ID</th>
           <th>Edad</th>
           <th>Sexo</th>
+          <th>Meses de asilo</th>
           <th>Fecha de Registro</th>
         </tr>
       </thead>
@@ -65,6 +66,7 @@
           <td>${e.id}</td>
           <td>${e.edad}</td>
           <td>${e.sexo}</td>
+          <td>${e.mesesAsilo}</td>
           <td>${new Date(e.fechaRegistro).toLocaleDateString()}</td>
         `;
           tbody.appendChild(fila);

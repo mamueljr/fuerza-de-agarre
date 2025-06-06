@@ -9,14 +9,29 @@
   <body>
     <h1>Registrar Nuevo Encuestado</h1>
     <form id="formRegistro" class="form">
-      <label for="id">ID del encuestado:</label>
-      <input type="text" id="id" required placeholder="Ej. ASILO01-001" />
+      <div class="fila-horizontal">
+        <div class="columna">
+          <label for="id">ID del encuestado:</label>
+          <input type="text" id="id" required placeholder="Ej. ASILO01-001" />
+        </div>
+        <div class="columna">
+          <label for="edad" style="display: block; margin-top: 20px">
+            Edad:</label
+          >
 
-      <label for="edad">Edad:</label>
+          <div class="edad-container">
+            <button type="button" onclick="ajustarEdad(-1)">−</button>
+            <input type="number" id="edad" required min="50" max="120" />
+            <button type="button" onclick="ajustarEdad(1)">+</button>
+          </div>
+        </div>
+      </div>
+
+      <label for="mesesAsilo">Meses de asilo:</label>
       <div class="edad-container">
-        <button type="button" onclick="ajustarEdad(-1)">−</button>
-        <input type="number" id="edad" required min="50" max="120" />
-        <button type="button" onclick="ajustarEdad(1)">+</button>
+        <button type="button" onclick="ajustarMeses(-1)">−</button>
+        <input type="number" id="mesesAsilo" required min="0" max="100" />
+        <button type="button" onclick="ajustarMeses(1)">+</button>
       </div>
 
       <label for="sexo">Sexo:</label>
@@ -53,6 +68,9 @@
         const id = document.getElementById("id").value.trim();
         const edad = parseInt(document.getElementById("edad").value.trim());
         const sexo = document.getElementById("sexo").value;
+        const mesesAsilo = parseInt(
+          document.getElementById("mesesAsilo").value.trim()
+        );
 
         if (!id || !edad || !sexo) {
           alert("Por favor complete todos los campos.");
@@ -63,6 +81,7 @@
           id,
           edad,
           sexo,
+          mesesAsilo,
           folstein: false,
           dinamometria: false,
           fechaRegistro: new Date().toISOString(),
@@ -85,6 +104,13 @@
         let valor = parseInt(edadInput.value) || 50;
         valor += delta;
         if (valor >= 50 && valor <= 120) edadInput.value = valor;
+      }
+
+      function ajustarMeses(delta) {
+        const input = document.getElementById("mesesAsilo");
+        let valor = parseInt(input.value) || 0;
+        valor += delta;
+        if (valor >= 0 && valor <= 100) input.value = valor;
       }
 
       function guardarBackup() {
