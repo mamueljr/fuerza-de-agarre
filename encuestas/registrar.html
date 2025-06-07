@@ -7,6 +7,40 @@
     <link rel="stylesheet" href="../css/style.css" />
   </head>
   <body>
+    <!-- MODAL DE CONSENTIMIENTO INFORMADO -->
+    <div id="modalConsentimiento" class="modal-overlay">
+      <div class="modal-contenido">
+        <h2 style="text-align: center">CONSENTIMIENTO INFORMADO</h2>
+        <p>Hola buen día:</p>
+        <p>
+          Si accede a participar en este estudio, se le pedirá responder varios
+          cuestionarios y realizar algunas pruebas físicas que forman parte de
+          una investigación que tiene como propósito principal el recabar
+          información importante sobre adultos mayores mexicanos.
+        </p>
+        <p>La participación en este estudio es estrictamente voluntaria.</p>
+        <p>Todos los resultados son confidenciales.</p>
+        <p>
+          No olvide leer muy bien las instrucciones de cada sección antes de
+          iniciarla.
+        </p>
+        <p>
+          Es muy importante que siempre responda con la verdad, pues los
+          resultados tienen un gran valor para nuestra investigación.
+        </p>
+        <p>De antemano gracias por su participación.</p>
+
+        <p style="text-align: center; font-weight: bold; margin-top: 30px">
+          SI YA NO TIENE NINGUNA DUDA<br />
+          OPRIMA EL BOTÓN OK,<br />
+          EN CASO CONTRARIO,<br />
+          LLAME AL ENCUESTADOR.
+        </p>
+
+        <button onclick="cerrarConsentimiento()" class="guardar">OK</button>
+      </div>
+    </div>
+
     <h1>Registrar Nuevo Encuestado</h1>
     <form id="formRegistro" class="form">
       <div class="fila-horizontal">
@@ -154,6 +188,10 @@
         a.download = "respaldo_encuestados.csv";
         a.click();
         URL.revokeObjectURL(url);
+      }
+
+      function cerrarConsentimiento() {
+        document.getElementById("modalConsentimiento").style.display = "none";
       }
     </script>
   </body>
